@@ -15,9 +15,13 @@ public sealed class HudTextController : MonoBehaviour
 
     static readonly string[] _spinner = { "|", "/", "-", "\\", "*" };
 
-    (Label e1, Label e2, Label e3) _labels;
+    (Label e1, Label e2, Label e3, Label e4) _labels;
     int _count;
     float _eofTime;
+
+    public int PlaybackTempo { get; set; } = 120;
+    public string SongNameDeckA { get; set; } = "Unknown";
+    public string SongNameDeckB { get; set; } = "Unknown";
 
     async Awaitable Start()
     {
@@ -26,6 +30,7 @@ public sealed class HudTextController : MonoBehaviour
         _labels.e1 = root.Q<Label>("label1");
         _labels.e2 = root.Q<Label>("label2");
         _labels.e3 = root.Q<Label>("label3");
+        _labels.e4 = root.Q<Label>("label4");
 
         while (true)
         {
@@ -42,6 +47,7 @@ public sealed class HudTextController : MonoBehaviour
         _labels.e1.text = GenerateLabel1();
         _labels.e2.text = GenerateLabel2();
         _labels.e3.text = GenerateLabel3();
+        _labels.e4.text = GenerateLabel4();
     }
 
     string GenerateLabel1()
@@ -76,6 +82,11 @@ public sealed class HudTextController : MonoBehaviour
          $"Visual Sync Rate [{1.0f / Time.deltaTime:.00}]\n" +
          $"Primary Occupancy [{Profiler.GetTotalAllocatedMemoryLong():N0}]\n" +
          $"Secondary Occupancy [{Profiler.GetMonoUsedSizeLong():N0}]";
+
+    string GenerateLabel4()
+      => $"BPM [{PlaybackTempo}]\n" +
+         $"Deck A [\"{SongNameDeckA}\"]\n" +
+         $"Deck B [\"{SongNameDeckB}\"]";
 }
 
 } // namespace Fluo
